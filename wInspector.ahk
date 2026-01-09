@@ -857,7 +857,7 @@ Gui_wInspector(*){
     Menus := MenuBar()
     Menus.Add("&Settings", SettingsMenu)
     Menus.Add("&Help", HelpMenu)
-    Menus.Add( "&Reload", (*) => (Gui_Close(MyGui), Reload()))
+    Menus.Add( "&Reload", (*) => (Gui_Reload(MyGui), Reload()))
     MyGui.MenuBar := Menus
 
     ; Toolbar
@@ -884,9 +884,9 @@ Gui_wInspector(*){
     ; Create a Status Bar to give info about the number of files and their total size:
     SB := MyGui.Add("StatusBar")
     MyGui.OnEvent("Size", Gui_Size)
-    MyGui.OnEvent("Close", Gui_Close)
+    MyGui.OnEvent("Close", (*)=>(ExitApp()))
 
-    Gui_Close(GuiObj){
+    Gui_Reload(GuiObj){
         ; Save the position of the window
         GuiObj.GetPos(&X,&Y)
         GuiObj.GetClientPos(,,&W,&H)
