@@ -563,7 +563,7 @@ Gui_wInspector(*){
         oGuiControl.AddText("x+5 yp+3", "H")
         ogEdit_cHeight := oGuiControl.AddEdit("x+2 yp-3 Right Number vcHPos w40")
         ogButton_cMove := oGuiControl.AddButton("x258 yp-1 w40", "Move")
-        ogButton_cMove.OnEvent("Click", (*) => (ControlMove(ogEdit_cXPos.value, ogEdit_cYPos.value, ogEdit_cWidth.value, ogEdit_cHeight.value, ogEdit_cID.value + 0)))
+        ogButton_cMove.OnEvent("Click", (*) => (ogEdit_cID.value != "" ? ControlMove(ogEdit_cXPos.value, ogEdit_cYPos.value, ogEdit_cWidth.value, ogEdit_cHeight.value, ogEdit_cID.value + 0) : ""))
     }
     ; Acc Section
     {
@@ -590,9 +590,31 @@ Gui_wInspector(*){
         ogEdit_mPos := oGuiMouse.AddEdit("x42 yp-3 w70", "")
         ogDDL_MouseCoordMode := oGuiMouse.AddDropDownList("x+3 yp w70 vDDL_MouseCoordMode Choose1", ["Screen", "Window", "Client"])
         ogBut_MouseMove := oGuiMouse.AddButton("x+3 yp-1 w50", "Move")
-        ogBut_MouseMove.OnEvent("Click", (*) => (CoordMode("Mouse", ogDDL_MouseCoordMode.Text), MouseMove(MyGui.MouseX+0,MyGui.MouseY+0)))
+        ogBut_MouseMove.OnEvent("Click", BtnMouseMove_Click)
         ogBut_MouseClick := oGuiMouse.AddButton("x+3 yp w50", "Click")
-        ogBut_MouseClick.OnEvent("Click", (*) => (CoordMode("Mouse", ogDDL_MouseCoordMode.Text), Mouseclick(,MyGui.MouseX+0,MyGui.MouseY+0)))
+        ogBut_MouseClick.OnEvent("Click", BtnMouseClick_Click)
+
+        BtnMouseMove_Click(*) {
+            global ogDDL_MouseCoordMode, ogEdit_mPos
+            CoordMode("Mouse", ogDDL_MouseCoordMode.Text)
+            if RegExMatch(ogEdit_mPos.value, "x(\-?\d+)\s*y(\-?\d+)", &m) {
+                MouseMove(m[1]+0, m[2]+0)
+            } else {
+                MouseGetPos(&x, &y)
+                MouseMove(x, y)
+            }
+        }
+
+        BtnMouseClick_Click(*) {
+            global ogDDL_MouseCoordMode, ogEdit_mPos
+            CoordMode("Mouse", ogDDL_MouseCoordMode.Text)
+            if RegExMatch(ogEdit_mPos.value, "x(\-?\d+)\s*y(\-?\d+)", &m) {
+                MouseClick(, m[1]+0, m[2]+0)
+            } else {
+                MouseGetPos(&x, &y)
+                MouseClick(, x, y)
+            }
+        }
         oGuiMouse.AddText("x6 y+4", "RGB")
         ogEdit_mColor := oGuiMouse.AddEdit("x42 yp-3 w70", "")
         ogText_mColor := oGuiMouse.AddText("x+3 yp w21 h21 BackgroundWhite +Border")
