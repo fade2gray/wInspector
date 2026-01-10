@@ -505,7 +505,7 @@ Gui_wInspector(*){
 
     ; Window Section
     {
-        ogGB_Window := oGuiWindow.AddGroupBox("w300 h145 Section", "Window")
+        ogGB_Window := oGuiWindow.AddGroupBox("w300 h165 Section", "Window")
         ogGB_Window.LeftMargin := 2
         ogGB_Window.BottomMargin := 2
         oGuiWindow.AddText("xp+3 yp+18", "Title")
@@ -521,8 +521,10 @@ Gui_wInspector(*){
         ogEdit_wProcess := oGuiWindow.AddEdit("x42 yp-3 w170 vwProcess +ReadOnly")
         oGuiWindow.AddText("x+3 yp+3", "PID")
         ogEdit_wPID := oGuiWindow.AddEdit("x237 yp-3 w60 Right vwPID +ReadOnly")
-
-        oGuiWindow.AddText("x30 y+5", "X")
+        oGuiWindow.AddText("x42 y+5", "Coords/Dimensions:")
+        ogRadio_Screen := oGuiWindow.AddRadio("x150 yp vRadioScreen Group Checked", "Screen")
+        ogRadio_Client := oGuiWindow.AddRadio("x206 yp vRadioClient", "Client")
+        oGuiWindow.AddText("x30 y+7", "X")
         ogEdit_wXPos := oGuiWindow.AddEdit("x42 yp-3 Right Number vwXPos w40")
         oGuiWindow.AddText("x+5 yp+3", "Y")
         ogEdit_wYPos := oGuiWindow.AddEdit("x+2 yp-3 Right Number vwYPos w40")
@@ -1102,7 +1104,7 @@ SetSelectedWindow(win_id){
     ogEdit_wPID.text := format("{:#x}",WinGetPID(win_id))
     Win_Transparent := WinGetTransparent(win_id)
     ogSlider_Transparent.value := Win_Transparent="" ? 255 : Win_Transparent
-    WinGetClientPos(&win_x, &win_y, &win_w, &win_h, win_id)
+    (ogRadio_Screen.Value) ? WinGetPos(&win_x, &win_y, &win_w, &win_h, win_id) : WinGetClientPos(&win_x, &win_y, &win_w, &win_h, win_id)
     ogEdit_wXPos.value := win_x
     ogEdit_wYPos.value := win_y
     ogEdit_wWidth.value := win_w
