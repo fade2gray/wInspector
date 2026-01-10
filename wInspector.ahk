@@ -1098,6 +1098,7 @@ SetSelectedWindow(win_id){
         return
     }
     ogEdit_wTitle.text := WinGetTitle(win_id)
+    (MyGui.Hwnd = win_id) ? ogSlider_Transparent.Opt('+Disabled') : ogSlider_Transparent.Opt('-Disabled')
     ogEdit_wClass.text := WinGetClass(win_id)
     ogEdit_wID.text := format("{:#x}", win_id)
     ogEdit_wProcess.text := WinGetProcessName(win_id)
